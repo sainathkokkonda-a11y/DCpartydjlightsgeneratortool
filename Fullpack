@@ -1,0 +1,506 @@
+<div class="dj-card">
+  <div class="dj-header">
+    <h2><br />Pro DJ Lights &amp; Audio Frequency Control</h2>
+    <p>Sound-Reactive Mode with Auto HSL Spectrum &amp; 9 Custom Color Palettes!</p>
+  </div>
+
+  <div class="dj-body">
+    <!--Screen Preview Box-->
+    <div class="light-display" id="lightDisplay">
+      <span class="light-text" id="lightText">Tap START to Light Up!</span>
+      <div class="shape-overlay" id="shapeOverlay"></div>
+    </div>
+
+    <!--Mode Selector-->
+    <div class="input-block">
+      <label class="blue-label">Select Lighting Effect Mode:</label>
+      <select class="blue-input" id="lightMode" onchange="changeMode()">
+        <option selected="" value="sound">🎤 Sound-Reactive (Volume Sensitive Colors)</option>
+        <option value="freq">🎧 Frequency Spectrum (Bass / Mid / Treble Independent)</option>
+        <option value="beat">🎵 Music Beat Strobe (Bass Drop Flash)</option>
+        <option value="disco">Disco Pulse (Multi Color Shift)</option>
+        <option value="strobe">Crazy Strobe (Fast Flash)</option>
+        <option value="heartbeat">Heartbeat Pulse (Red Dim-Bright)</option>
+        <option value="emergency">Emergency Warning (Ambulance Flasher)</option>
+        <option value="police">Police Siren (Red &amp; Blue)</option>
+        <option value="rainbow">Rainbow Wave</option>
+        <option value="custom">Custom Color Sequence Mode</option>
+      </select>
+    </div>
+
+    <!--Sound-Reactive Color Mode Options (Auto HSL vs Preset Palettes)-->
+    <div class="input-block" id="soundColorBlock">
+      <label class="blue-label">Sound-Reactive Color Engine:</label>
+      <select class="blue-input" id="soundColorType" onchange="toggleSoundColorType()">
+        <option selected="" value="hsl">🌈 Auto HSL Spectrum (Full Dynamic Spectrum)</option>
+        <option value="palette">🎨 Custom Color Palette (Choose 1 of 9 Themes)</option>
+      </select>
+    </div>
+
+    <!--9 Custom Color Palettes Dropdown-->
+    <div class="input-block" id="paletteBlock" style="display: none;">
+      <label class="blue-label">Select Color Palette (9 Presets):</label>
+      <select class="blue-input" id="colorPaletteSelect">
+        <option value="cyberpunk">1. Cyberpunk Neon (Pink / Cyan / Purple)</option>
+        <option value="fire">2. Fire &amp; Flame (Red / Orange / Yellow)</option>
+        <option value="ocean">3. Deep Ocean (Navy / Cyan / Aqua)</option>
+        <option value="matrix">4. Matrix Hacker (Lime / Neon Green / Dark Green)</option>
+        <option value="sunset">5. Sunset Glow (Magenta / Coral / Gold)</option>
+        <option value="party">6. Club Party (Violet / Hot Pink / Electric Blue)</option>
+        <option value="policeStyle">7. Police Siren (Red / Blue / White)</option>
+        <option value="gold">8. Gold &amp; Royalty (Gold / Yellow / Amber)</option>
+        <option value="toxic">9. Toxic Acid (Neon Green / Purple / Yellow)</option>
+      </select>
+    </div>
+
+    <!--Frequency Color & Individual Sensitivity Block-->
+    <div class="input-block" id="freqColorBlock" style="display: none;">
+      <label class="blue-label">Frequency Spectrum Colors &amp; Sensitivity Adjustments:</label>
+      <div class="freq-control-wrapper">
+        <div class="freq-box">
+          <span class="freq-title">Bass (Low)</span>
+          <input class="color-picker" id="bassColor" type="color" value="#ff0000" />
+          <label class="sub-label">Sens: <span id="bassVal">2.0x</span></label>
+          <input class="blue-slider" id="bassSens" max="5.0" oninput="updateFreqText()" type="range" value="2.0" />
+        </div>
+        <div class="freq-box">
+          <span class="freq-title">Mids (Vocals)</span>
+          <input class="color-picker" id="midColor" type="color" value="#ffea00" />
+          <label class="sub-label">Sens: <span id="midVal">2.0x</span></label>
+          <input class="blue-slider" id="midSens" max="5.0" oninput="updateFreqText()" type="range" value="2.0" />
+        </div>
+        <div class="freq-box">
+          <span class="freq-title">Treble (High)</span>
+          <input class="color-picker" id="trebleColor" type="color" value="#00e5ff" />
+          <label class="sub-label">Sens: <span id="trebleVal">2.0x</span></label>
+          <input class="blue-slider" id="trebleSens" max="5.0" oninput="updateFreqText()" type="range" value="2.0" />
+        </div>
+      </div>
+    </div>
+
+    <!--Custom Sequence Color Pickers-->
+    <div class="input-block" id="customColorBlock" style="display: none;">
+      <label class="blue-label">Pick Your Custom Colors:</label>
+      <div class="color-picker-group">
+        <input class="color-picker" id="color1" type="color" value="#ff0055" />
+        <input class="color-picker" id="color2" type="color" value="#00e5ff" />
+        <input class="color-picker" id="color3" type="color" value="#76ff03" />
+      </div>
+    </div>
+
+    <!--Visual Shapes Selector-->
+    <div class="input-block">
+      <label class="blue-label">Visual Pattern Overlay:</label>
+      <select class="blue-input" id="shapePattern" onchange="updateShape()">
+        <option selected="" value="none">None (Solid Full Color)</option>
+        <option value="circle">Center Pulsing Circle</option>
+        <option value="grid">Disco Grid Pattern</option>
+        <option value="bubbles">Floating Party Bubbles</option>
+      </select>
+    </div>
+
+    <!--Main Controls Grid: Speed, Mic Gain & Brightness-->
+    <div class="control-grid">
+      <div class="input-block" id="speedControlBlock">
+        <div class="label-row">
+          <label class="blue-label">Flashing Speed:</label>
+          <span class="indicator-text" id="speedVal">Medium</span>
+        </div>
+        <input class="blue-slider" id="speedSlider" max="800" oninput="updateSpeedText()" type="range" value="400" />
+      </div>
+
+      <div class="input-block" id="masterSensBlock">
+        <div class="label-row">
+          <label class="blue-label">Master Mic Sens:</label>
+          <span class="indicator-text" id="masterSensVal">2.0x</span>
+        </div>
+        <input class="blue-slider" id="masterSensSlider" max="5.0" oninput="updateMasterSensText()" type="range" value="2.0" />
+      </div>
+
+      <div class="input-block full-width-block">
+        <div class="label-row">
+          <label class="blue-label">Light Brightness:</label>
+          <span class="indicator-text" id="brightVal">100% (Full)</span>
+        </div>
+        <input class="blue-slider" id="brightSlider" max="100" oninput="updateBrightness()" type="range" value="100" />
+      </div>
+    </div>
+
+    <!--Action Buttons-->
+    <div class="btn-group">
+      <button class="blue-calc-btn" id="startBtn" onclick="toggleLights()" type="button">Start DJ Lights</button>
+      <button class="blue-calc-btn secondary" onclick="goFullscreen()" type="button">Fullscreen Mode</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .dj-card * { box-sizing: border-box; }
+  .dj-card {
+    width: 100%; max-width: 600px; margin: 15px auto;
+    background: #ffffff; border-radius: 14px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif; border: 2px solid #1565c0; overflow: hidden;
+  }
+  .dj-header { background: #1565c0; padding: 18px 15px; text-align: center; color: #ffffff; }
+  .dj-header h2 { margin: 0; font-size: 20px; font-weight: bold; color: #ffffff; }
+  .dj-header p { margin: 6px 0 0 0; font-size: 13px; color: #e3f2fd; opacity: 0.95; }
+  .dj-body { padding: 16px; }
+  .light-display {
+    position: relative; width: 100%; height: 180px;
+    background-color: #0d47a1; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px; border: 2px solid #1565c0; overflow: hidden;
+    transition: background-color 0.05s ease, opacity 0.1s ease;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.3);
+  }
+  .light-text {
+    color: #ffffff; font-weight: bold; font-size: 15px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.6); pointer-events: none; z-index: 2;
+    text-align: center; padding: 0 10px;
+  }
+  .shape-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 1; display: none; }
+  .shape-circle { background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(0,0,0,0.4) 70%); }
+  .shape-grid { background-image: linear-gradient(rgba(255,255,255,0.3) 2px, transparent 2px), linear-gradient(90deg, rgba(255,255,255,0.3) 2px, transparent 2px); background-size: 25px 25px; }
+  .shape-bubbles { background-image: radial-gradient(circle, rgba(255,255,255,0.6) 15%, transparent 20%), radial-gradient(circle, rgba(255,255,255,0.4) 15%, transparent 20%); background-size: 40px 40px; background-position: 0 0, 20px 20px; }
+  .input-block { margin-bottom: 14px; width: 100%; }
+  .label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+  .blue-label { font-weight: bold; color: #1565c0; font-size: 13px; display: block; }
+  .sub-label { font-size: 11px; color: #1565c0; font-weight: bold; margin-top: 4px; display: block; }
+  .indicator-text { font-size: 12px; color: #1565c0; font-weight: bold; }
+  .blue-input { width: 100%; padding: 10px; border: 1.5px solid #90caf9; border-radius: 8px; outline: none; font-size: 14px; color: #333; background: #fff; }
+  .blue-input:focus { border-color: #1565c0; }
+  .freq-control-wrapper { display: flex; gap: 8px; width: 100%; margin-top: 6px; }
+  .freq-box { flex: 1; background: #e3f2fd; padding: 8px 6px; border-radius: 8px; border: 1px solid #90caf9; text-align: center; }
+  .freq-title { font-size: 11px; font-weight: bold; color: #1565c0; display: block; margin-bottom: 4px; }
+  .color-picker-group { display: flex; gap: 10px; width: 100%; }
+  .color-picker { width: 100%; height: 32px; border: 1.5px solid #90caf9; border-radius: 6px; cursor: pointer; background: none; padding: 2px; }
+  .control-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .full-width-block { grid-column: span 2; }
+  .blue-slider { width: 100%; accent-color: #1565c0; cursor: pointer; margin: 3px 0; }
+  .btn-group { display: flex; gap: 10px; margin-top: 8px; }
+  .blue-calc-btn { flex: 1; padding: 12px 8px; background-color: #1565c0; color: #ffffff; border: none; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; transition: background-color 0.2s; text-align: center; }
+  .blue-calc-btn:hover { background-color: #0d47a1; }
+  .blue-calc-btn.secondary { background-color: #e3f2fd; color: #1565c0; border: 1.5px solid #1565c0; }
+  .blue-calc-btn.secondary:hover { background-color: #bbdefb; }
+
+  @media (max-width: 500px) {
+    .dj-header h2 { font-size: 17px; }
+    .dj-header p { font-size: 11px; }
+    .light-display { height: 140px; }
+    .freq-control-wrapper { flex-direction: column; gap: 6px; }
+    .control-grid { grid-template-columns: 1fr; gap: 0; }
+    .full-width-block { grid-column: span 1; }
+    .btn-group { flex-direction: column; }
+    .blue-calc-btn { width: 100%; padding: 12px; }
+  }
+
+  .light-display:fullscreen { width: 100vw; height: 100vh; border-radius: 0; border: none; }
+  .light-display:-webkit-full-screen { width: 100vw; height: 100vh; border-radius: 0; border: none; }
+</style>
+
+<script>
+  let isRunning = false;
+  let lightTimer = null;
+  let stepIndex = 0;
+  
+  let audioCtx = null;
+  let analyser = null;
+  let micStream = null;
+  let animId = null;
+
+  // 9 Preset Color Palettes for Sound Reactive Mode
+  const palettes = {
+    cyberpunk: ["#ff007f", "#00f5d4", "#7b2cbf"],
+    fire: ["#ff0000", "#ff6600", "#ffcc00"],
+    ocean: ["#001219", "#0077b6", "#90e0ef"],
+    matrix: ["#003300", "#00cc00", "#66ff66"],
+    sunset: ["#d00000", "#ff4800", "#ffb703"],
+    party: ["#7209b7", "#f72585", "#4cc9f0"],
+    policeStyle: ["#ff0000", "#0022ff", "#ffffff"],
+    gold: ["#583101", "#ffb703", "#ffe6a7"],
+    toxic: ["#38b000", "#70e000", "#ccff00"]
+  };
+
+  const discoColors = ["#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff", "#00ffff", "#ffffff"];
+
+  function updateSpeedText() {
+    const rawVal = parseInt(document.getElementById('speedSlider').value);
+    const speedTxt = document.getElementById('speedVal');
+    
+    if (rawVal <= 150) speedTxt.innerText = "Very Slow";
+    else if (rawVal <= 300) speedTxt.innerText = "Slow";
+    else if (rawVal <= 500) speedTxt.innerText = "Medium";
+    else if (rawVal <= 700) speedTxt.innerText = "Fast";
+    else speedTxt.innerText = "Ultra Fast";
+
+    if (isRunning && !isAudioMode()) { stopLights(); startLights(); }
+  }
+
+  function updateMasterSensText() {
+    const val = parseFloat(document.getElementById('masterSensSlider').value).toFixed(1);
+    document.getElementById('masterSensVal').innerText = val + "x";
+  }
+
+  function updateFreqText() {
+    document.getElementById('bassVal').innerText = parseFloat(document.getElementById('bassSens').value).toFixed(1) + "x";
+    document.getElementById('midVal').innerText = parseFloat(document.getElementById('midSens').value).toFixed(1) + "x";
+    document.getElementById('trebleVal').innerText = parseFloat(document.getElementById('trebleSens').value).toFixed(1) + "x";
+  }
+
+  function updateBrightness() {
+    const val = document.getElementById('brightSlider').value;
+    const brightTxt = document.getElementById('brightVal');
+    
+    if (val == 100) brightTxt.innerText = "100% (Full)";
+    else if (val <= 30) brightTxt.innerText = val + "% (Dim)";
+    else brightTxt.innerText = val + "%";
+
+    document.getElementById('lightDisplay').style.opacity = val / 100;
+  }
+
+  function updateShape() {
+    const shape = document.getElementById('shapePattern').value;
+    const overlay = document.getElementById('shapeOverlay');
+    overlay.className = "shape-overlay";
+    if (shape !== 'none') {
+      overlay.classList.add('shape-' + shape);
+      overlay.style.display = 'block';
+    } else {
+      overlay.style.display = 'none';
+    }
+  }
+
+  function toggleSoundColorType() {
+    const type = document.getElementById('soundColorType').value;
+    document.getElementById('paletteBlock').style.display = (type === 'palette') ? 'block' : 'none';
+  }
+
+  function changeMode() {
+    const mode = document.getElementById('lightMode').value;
+    
+    document.getElementById('soundColorBlock').style.display = (mode === 'sound') ? 'block' : 'none';
+    document.getElementById('paletteBlock').style.display = (mode === 'sound' && document.getElementById('soundColorType').value === 'palette') ? 'block' : 'none';
+    document.getElementById('freqColorBlock').style.display = (mode === 'freq') ? 'block' : 'none';
+    document.getElementById('customColorBlock').style.display = (mode === 'custom') ? 'block' : 'none';
+    
+    if (isAudioMode()) {
+      document.getElementById('masterSensBlock').style.display = 'block';
+      document.getElementById('speedControlBlock').style.display = 'none';
+    } else {
+      document.getElementById('masterSensBlock').style.display = 'none';
+      document.getElementById('speedControlBlock').style.display = 'block';
+    }
+
+    if (isRunning) { stopLights(); startLights(); }
+  }
+
+  function isAudioMode() {
+    const mode = document.getElementById('lightMode').value;
+    return mode === 'freq' || mode === 'sound' || mode === 'beat';
+  }
+
+  function toggleLights() {
+    if (isRunning) stopLights();
+    else startLights();
+  }
+
+  async function startLights() {
+    isRunning = true;
+    document.getElementById('startBtn').innerText = "Stop DJ Lights";
+    document.getElementById('startBtn').style.backgroundColor = "#d32f2f";
+    document.getElementById('lightText').style.display = "none";
+
+    if (isAudioMode()) {
+      await initAudio();
+    } else {
+      runLightEffect();
+    }
+  }
+
+  function stopLights() {
+    isRunning = false;
+    clearTimeout(lightTimer);
+    if (animId) cancelAnimationFrame(animId);
+
+    if (micStream) {
+      micStream.getTracks().forEach(track => track.stop());
+      micStream = null;
+    }
+    if (audioCtx) {
+      audioCtx.close();
+      audioCtx = null;
+    }
+
+    document.getElementById('startBtn').innerText = "Start DJ Lights";
+    document.getElementById('startBtn').style.backgroundColor = "#1565c0";
+    document.getElementById('lightText').style.display = "block";
+    document.getElementById('lightDisplay').style.backgroundColor = "#0d47a1";
+  }
+
+  async function initAudio() {
+    try {
+      micStream = await navigator.mediaDevices.getUserMedia({ 
+        audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }, 
+        video: false 
+      });
+      
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new AudioContext();
+
+      if (audioCtx.state === 'suspended') {
+        await audioCtx.resume();
+      }
+
+      analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 512; 
+      analyser.smoothingTimeConstant = 0.2; 
+
+      const source = audioCtx.createMediaStreamSource(micStream);
+      source.connect(analyser);
+
+      processAudio();
+    } catch (err) {
+      alert("Microphone Access Required for Sound & Frequency Modes!");
+      stopLights();
+    }
+  }
+
+  function processAudio() {
+    if (!isRunning || !analyser) return;
+
+    const display = document.getElementById('lightDisplay');
+    const mode = document.getElementById('lightMode').value;
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+    analyser.getByteFrequencyData(dataArray);
+
+    const masterSens = parseFloat(document.getElementById('masterSensSlider').value);
+
+    if (mode === 'sound') {
+      let sum = 0;
+      for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
+      let average = (sum / dataArray.length) * masterSens;
+
+      const soundType = document.getElementById('soundColorType').value;
+
+      if (soundType === 'hsl') {
+        // Auto HSL Spectrum Mode
+        const hue = Math.floor((average * 5) % 360);
+        const lightness = Math.min(85, Math.max(5, average * 1.5));
+        display.style.backgroundColor = `hsl(${hue}, 100%, ${lightness}%)`;
+      } else {
+        // Preset Palette Mode (Select 1 of 9 themes)
+        const selectedPaletteKey = document.getElementById('colorPaletteSelect').value;
+        const currentPalette = palettes[selectedPaletteKey] || palettes.cyberpunk;
+
+        if (average < 5) {
+          display.style.backgroundColor = "#000000";
+        } else if (average < 25) {
+          display.style.backgroundColor = currentPalette[0];
+        } else if (average < 55) {
+          display.style.backgroundColor = currentPalette[1];
+        } else {
+          display.style.backgroundColor = currentPalette[2];
+        }
+      }
+    }
+    else if (mode === 'freq') {
+      let bass = 0, mid = 0, treble = 0;
+      
+      for (let i = 0; i < 8; i++) bass += dataArray[i];             
+      for (let i = 8; i < 60; i++) mid += dataArray[i];             
+      for (let i = 60; i < bufferLength; i++) treble += dataArray[i]; 
+
+      const bassSensVal = parseFloat(document.getElementById('bassSens').value) * masterSens;
+      const midSensVal = parseFloat(document.getElementById('midSens').value) * masterSens;
+      const trebleSensVal = parseFloat(document.getElementById('trebleSens').value) * masterSens;
+
+      bass = (bass / 8) * bassSensVal;
+      mid = (mid / 52) * midSensVal;
+      treble = (treble / (bufferLength - 60)) * trebleSensVal;
+
+      const cBass = document.getElementById('bassColor').value;
+      const cMid = document.getElementById('midColor').value;
+      const cTreble = document.getElementById('trebleColor').value;
+
+      let maxVal = Math.max(bass, mid, treble);
+
+      if (maxVal > 3) { 
+        if (maxVal === bass) display.style.backgroundColor = cBass;
+        else if (maxVal === mid) display.style.backgroundColor = cMid;
+        else display.style.backgroundColor = cTreble;
+      } else {
+        display.style.backgroundColor = "#000000"; 
+      }
+    }
+    else if (mode === 'beat') {
+      let sum = 0;
+      for (let i = 0; i < 8; i++) sum += dataArray[i];
+      let bassAverage = (sum / 8) * masterSens;
+
+      if (bassAverage > 12) {
+        stepIndex = (stepIndex + 1) % discoColors.length;
+        display.style.backgroundColor = discoColors[stepIndex];
+      } else {
+        display.style.backgroundColor = "#000000";
+      }
+    }
+
+    animId = requestAnimationFrame(processAudio);
+  }
+
+  function runLightEffect() {
+    if (!isRunning) return;
+
+    const display = document.getElementById('lightDisplay');
+    const mode = document.getElementById('lightMode').value;
+    const rawVal = parseInt(document.getElementById('speedSlider').value);
+    const delay = 850 - rawVal; 
+
+    if (mode === 'strobe') {
+      stepIndex = (stepIndex + 1) % 2;
+      display.style.backgroundColor = stepIndex === 0 ? "#ffffff" : "#000000";
+    } 
+    else if (mode === 'disco') {
+      stepIndex = (stepIndex + 1) % discoColors.length;
+      display.style.backgroundColor = discoColors[stepIndex];
+    } 
+    else if (mode === 'heartbeat') {
+      stepIndex = (stepIndex + 1) % 4;
+      const reds = ["#ff0000", "#990000", "#ff3333", "#330000"];
+      display.style.backgroundColor = reds[stepIndex];
+    } 
+    else if (mode === 'emergency' || mode === 'police') {
+      stepIndex = (stepIndex + 1) % 2;
+      display.style.backgroundColor = stepIndex === 0 ? "#ff0000" : "#0022ff";
+    } 
+    else if (mode === 'rainbow') {
+      const hue = (stepIndex * 25) % 360;
+      display.style.backgroundColor = `hsl(${hue}, 100%, 50%)`;
+      stepIndex++;
+    } 
+    else if (mode === 'custom') {
+      const c1 = document.getElementById('color1').value;
+      const c2 = document.getElementById('color2').value;
+      const c3 = document.getElementById('color3').value;
+      const userColors = [c1, c2, c3];
+      stepIndex = (stepIndex + 1) % userColors.length;
+      display.style.backgroundColor = userColors[stepIndex];
+    }
+
+    lightTimer = setTimeout(runLightEffect, delay);
+  }
+
+  function goFullscreen() {
+    const display = document.getElementById('lightDisplay');
+    if (!isRunning) startLights();
+    
+    if (display.requestFullscreen) display.requestFullscreen();
+    else if (display.webkitRequestFullscreen) display.webkitRequestFullscreen();
+    else if (display.msRequestFullscreen) display.msRequestFullscreen();
+  }
+
+  // Initial Setup
+  changeMode();
+</script>
