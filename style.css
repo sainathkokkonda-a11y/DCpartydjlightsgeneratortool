@@ -1,0 +1,62 @@
+.dj-card * { box-sizing: border-box; }
+.dj-card {
+  width: 100%; max-width: 600px; margin: 15px auto;
+  background: #ffffff; border-radius: 14px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif; border: 2px solid #1565c0; overflow: hidden;
+}
+.dj-header { background: #1565c0; padding: 18px 15px; text-align: center; color: #ffffff; }
+.dj-header h2 { margin: 0; font-size: 20px; font-weight: bold; color: #ffffff; }
+.dj-header p { margin: 6px 0 0 0; font-size: 13px; color: #e3f2fd; opacity: 0.95; }
+.dj-body { padding: 16px; }
+.light-display {
+  position: relative; width: 100%; height: 180px;
+  background-color: #0d47a1; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 16px; border: 2px solid #1565c0; overflow: hidden;
+  transition: background-color 0.05s ease, opacity 0.1s ease;
+  box-shadow: inset 0 0 15px rgba(0,0,0,0.3);
+}
+.light-text {
+  color: #ffffff; font-weight: bold; font-size: 15px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.6); pointer-events: none; z-index: 2;
+  text-align: center; padding: 0 10px;
+}
+.shape-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 1; display: none; }
+.shape-circle { background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(0,0,0,0.4) 70%); }
+.shape-grid { background-image: linear-gradient(rgba(255,255,255,0.3) 2px, transparent 2px), linear-gradient(90deg, rgba(255,255,255,0.3) 2px, transparent 2px); background-size: 25px 25px; }
+.shape-bubbles { background-image: radial-gradient(circle, rgba(255,255,255,0.6) 15%, transparent 20%), radial-gradient(circle, rgba(255,255,255,0.4) 15%, transparent 20%); background-size: 40px 40px; background-position: 0 0, 20px 20px; }
+.input-block { margin-bottom: 14px; width: 100%; }
+.label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+.blue-label { font-weight: bold; color: #1565c0; font-size: 13px; display: block; }
+.sub-label { font-size: 11px; color: #1565c0; font-weight: bold; margin-top: 4px; display: block; }
+.indicator-text { font-size: 12px; color: #1565c0; font-weight: bold; }
+.blue-input { width: 100%; padding: 10px; border: 1.5px solid #90caf9; border-radius: 8px; outline: none; font-size: 14px; color: #333; background: #fff; }
+.blue-input:focus { border-color: #1565c0; }
+.freq-control-wrapper { display: flex; gap: 8px; width: 100%; margin-top: 6px; }
+.freq-box { flex: 1; background: #e3f2fd; padding: 8px 6px; border-radius: 8px; border: 1px solid #90caf9; text-align: center; }
+.freq-title { font-size: 11px; font-weight: bold; color: #1565c0; display: block; margin-bottom: 4px; }
+.color-picker-group { display: flex; gap: 10px; width: 100%; }
+.color-picker { width: 100%; height: 32px; border: 1.5px solid #90caf9; border-radius: 6px; cursor: pointer; background: none; padding: 2px; }
+.control-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.full-width-block { grid-column: span 2; }
+.blue-slider { width: 100%; accent-color: #1565c0; cursor: pointer; margin: 3px 0; }
+.btn-group { display: flex; gap: 10px; margin-top: 8px; }
+.blue-calc-btn { flex: 1; padding: 12px 8px; background-color: #1565c0; color: #ffffff; border: none; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; transition: background-color 0.2s; text-align: center; }
+.blue-calc-btn:hover { background-color: #0d47a1; }
+.blue-calc-btn.secondary { background-color: #e3f2fd; color: #1565c0; border: 1.5px solid #1565c0; }
+.blue-calc-btn.secondary:hover { background-color: #bbdefb; }
+
+@media (max-width: 500px) {
+  .dj-header h2 { font-size: 17px; }
+  .dj-header p { font-size: 11px; }
+  .light-display { height: 140px; }
+  .freq-control-wrapper { flex-direction: column; gap: 6px; }
+  .control-grid { grid-template-columns: 1fr; gap: 0; }
+  .full-width-block { grid-column: span 1; }
+  .btn-group { flex-direction: column; }
+  .blue-calc-btn { width: 100%; padding: 12px; }
+}
+
+.light-display:fullscreen { width: 100vw; height: 100vh; border-radius: 0; border: none; }
+.light-display:-webkit-full-screen { width: 100vw; height: 100vh; border-radius: 0; border: none; }
