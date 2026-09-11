@@ -1,0 +1,135 @@
+<div class="dj-card">
+  <div class="dj-header">
+    <h2><br />Pro DJ Lights &amp; Audio Frequency Control</h2>
+    <p>Sound-Reactive Mode with Auto HSL Spectrum &amp; 9 Custom Color Palettes!</p>
+  </div>
+
+  <div class="dj-body">
+    <!--Screen Preview Box-->
+    <div class="light-display" id="lightDisplay">
+      <span class="light-text" id="lightText">Tap START to Light Up!</span>
+      <div class="shape-overlay" id="shapeOverlay"></div>
+    </div>
+
+    <!--Mode Selector-->
+    <div class="input-block">
+      <label class="blue-label">Select Lighting Effect Mode:</label>
+      <select class="blue-input" id="lightMode" onchange="changeMode()">
+        <option selected="" value="sound">🎤 Sound-Reactive (Volume Sensitive Colors)</option>
+        <option value="freq">🎧 Frequency Spectrum (Bass / Mid / Treble Independent)</option>
+        <option value="beat">🎵 Music Beat Strobe (Bass Drop Flash)</option>
+        <option value="disco">Disco Pulse (Multi Color Shift)</option>
+        <option value="strobe">Crazy Strobe (Fast Flash)</option>
+        <option value="heartbeat">Heartbeat Pulse (Red Dim-Bright)</option>
+        <option value="emergency">Emergency Warning (Ambulance Flasher)</option>
+        <option value="police">Police Siren (Red &amp; Blue)</option>
+        <option value="rainbow">Rainbow Wave</option>
+        <option value="custom">Custom Color Sequence Mode</option>
+      </select>
+    </div>
+
+    <!--Sound-Reactive Color Mode Options (Auto HSL vs Preset Palettes)-->
+    <div class="input-block" id="soundColorBlock">
+      <label class="blue-label">Sound-Reactive Color Engine:</label>
+      <select class="blue-input" id="soundColorType" onchange="toggleSoundColorType()">
+        <option selected="" value="hsl">🌈 Auto HSL Spectrum (Full Dynamic Spectrum)</option>
+        <option value="palette">🎨 Custom Color Palette (Choose 1 of 9 Themes)</option>
+      </select>
+    </div>
+
+    <!--9 Custom Color Palettes Dropdown-->
+    <div class="input-block" id="paletteBlock" style="display: none;">
+      <label class="blue-label">Select Color Palette (9 Presets):</label>
+      <select class="blue-input" id="colorPaletteSelect">
+        <option value="cyberpunk">1. Cyberpunk Neon (Pink / Cyan / Purple)</option>
+        <option value="fire">2. Fire &amp; Flame (Red / Orange / Yellow)</option>
+        <option value="ocean">3. Deep Ocean (Navy / Cyan / Aqua)</option>
+        <option value="matrix">4. Matrix Hacker (Lime / Neon Green / Dark Green)</option>
+        <option value="sunset">5. Sunset Glow (Magenta / Coral / Gold)</option>
+        <option value="party">6. Club Party (Violet / Hot Pink / Electric Blue)</option>
+        <option value="policeStyle">7. Police Siren (Red / Blue / White)</option>
+        <option value="gold">8. Gold &amp; Royalty (Gold / Yellow / Amber)</option>
+        <option value="toxic">9. Toxic Acid (Neon Green / Purple / Yellow)</option>
+      </select>
+    </div>
+
+    <!--Frequency Color & Individual Sensitivity Block-->
+    <div class="input-block" id="freqColorBlock" style="display: none;">
+      <label class="blue-label">Frequency Spectrum Colors &amp; Sensitivity Adjustments:</label>
+      <div class="freq-control-wrapper">
+        <div class="freq-box">
+          <span class="freq-title">Bass (Low)</span>
+          <input class="color-picker" id="bassColor" type="color" value="#ff0000" />
+          <label class="sub-label">Sens: <span id="bassVal">2.0x</span></label>
+          <input class="blue-slider" id="bassSens" max="5.0" oninput="updateFreqText()" type="range" value="2.0" />
+        </div>
+        <div class="freq-box">
+          <span class="freq-title">Mids (Vocals)</span>
+          <input class="color-picker" id="midColor" type="color" value="#ffea00" />
+          <label class="sub-label">Sens: <span id="midVal">2.0x</span></label>
+          <input class="blue-slider" id="midSens" max="5.0" oninput="updateFreqText()" type="range" value="2.0" />
+        </div>
+        <div class="freq-box">
+          <span class="freq-title">Treble (High)</span>
+          <input class="color-picker" id="trebleColor" type="color" value="#00e5ff" />
+          <label class="sub-label">Sens: <span id="trebleVal">2.0x</span></label>
+          <input class="blue-slider" id="trebleSens" max="5.0" oninput="updateFreqText()" type="range" value="2.0" />
+        </div>
+      </div>
+    </div>
+
+    <!--Custom Sequence Color Pickers-->
+    <div class="input-block" id="customColorBlock" style="display: none;">
+      <label class="blue-label">Pick Your Custom Colors:</label>
+      <div class="color-picker-group">
+        <input class="color-picker" id="color1" type="color" value="#ff0055" />
+        <input class="color-picker" id="color2" type="color" value="#00e5ff" />
+        <input class="color-picker" id="color3" type="color" value="#76ff03" />
+      </div>
+    </div>
+
+    <!--Visual Shapes Selector-->
+    <div class="input-block">
+      <label class="blue-label">Visual Pattern Overlay:</label>
+      <select class="blue-input" id="shapePattern" onchange="updateShape()">
+        <option selected="" value="none">None (Solid Full Color)</option>
+        <option value="circle">Center Pulsing Circle</option>
+        <option value="grid">Disco Grid Pattern</option>
+        <option value="bubbles">Floating Party Bubbles</option>
+      </select>
+    </div>
+
+    <!--Main Controls Grid: Speed, Mic Gain & Brightness-->
+    <div class="control-grid">
+      <div class="input-block" id="speedControlBlock">
+        <div class="label-row">
+          <label class="blue-label">Flashing Speed:</label>
+          <span class="indicator-text" id="speedVal">Medium</span>
+        </div>
+        <input class="blue-slider" id="speedSlider" max="800" oninput="updateSpeedText()" type="range" value="400" />
+      </div>
+
+      <div class="input-block" id="masterSensBlock">
+        <div class="label-row">
+          <label class="blue-label">Master Mic Sens:</label>
+          <span class="indicator-text" id="masterSensVal">2.0x</span>
+        </div>
+        <input class="blue-slider" id="masterSensSlider" max="5.0" oninput="updateMasterSensText()" type="range" value="2.0" />
+      </div>
+
+      <div class="input-block full-width-block">
+        <div class="label-row">
+          <label class="blue-label">Light Brightness:</label>
+          <span class="indicator-text" id="brightVal">100% (Full)</span>
+        </div>
+        <input class="blue-slider" id="brightSlider" max="100" oninput="updateBrightness()" type="range" value="100" />
+      </div>
+    </div>
+
+    <!--Action Buttons-->
+    <div class="btn-group">
+      <button class="blue-calc-btn" id="startBtn" onclick="toggleLights()" type="button">Start DJ Lights</button>
+      <button class="blue-calc-btn secondary" onclick="goFullscreen()" type="button">Fullscreen Mode</button>
+    </div>
+  </div>
+</div>
